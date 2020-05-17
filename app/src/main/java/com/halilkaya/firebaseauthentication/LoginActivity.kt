@@ -12,6 +12,7 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
 import com.halilkaya.firebaseauthentication.Fragments.OnayMailiDialogFragment
+import com.halilkaya.firebaseauthentication.Fragments.SifreSifirlamaDialogFragment
 import kotlinx.android.synthetic.main.activity_login.*
 import java.time.Instant
 
@@ -51,6 +52,13 @@ class LoginActivity : AppCompatActivity() {
 
         })
 
+        tvSifremiUnuttum.setOnClickListener {
+
+            var sifreSifirlamaDialogFragment = SifreSifirlamaDialogFragment()
+            sifreSifirlamaDialogFragment.show(supportFragmentManager,"sifreSifirlamaFragment")
+
+
+        }
 
 
 
