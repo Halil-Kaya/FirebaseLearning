@@ -85,6 +85,19 @@
         android:layout_height="wrap_content"
         android:text="kullaniciyiGetir"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvOnaylamaMaili" />
+
+    <TextView
+        android:id="@+id/tvOnaylamaMaili"
+        android:layout_width="match_parent"
+        android:layout_height="41dp"
+        android:gravity="center"
+        android:text="onaylama maili gelmedi mi?"
+        android:textSize="20dp"
+        android:textStyle="italic|bold"
+        app:layout_constraintEnd_toEndOf="@+id/tvKayitOl"
+        app:layout_constraintStart_toStartOf="@+id/tvKayitOl"
         app:layout_constraintTop_toBottomOf="@+id/tvKayitOl" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,20 +5,26 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.fragment.app.FragmentManager
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.ktx.Firebase
+import com.halilkaya.firebaseauthentication.Fragments.OnayMailiDialogFragment
 import kotlinx.android.synthetic.main.activity_login.*
 import java.time.Instant
 
 class LoginActivity : AppCompatActivity() {
 
+
+    lateinit var myAuthStateListener:FirebaseAuth.AuthStateListener
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-
+        initMyAuthListener()
 
 
 
@@ -33,12 +39,72 @@ class LoginActivity : AppCompatActivity() {
         })
 
 
+        tvOnaylamaMaili.setOnClickListener(object : View.OnClickListener{
+
+            override fun onClick(v: View?) {
+
+                var onayMailiDialogFragment = OnayMailiDialogFragment(this@LoginActivity)
+                onayMailiDialogFragment.show(supportFragmentManager,"onayFragment")
+
+
+            }
+
+        })
+
+
+
 
         btnkullaniciyiGetir.setOnClickListener {
 
             Toast.makeText(this,"suanki Kullanici: ${FirebaseAuth.getInstance().currentUser?.email}",Toast.LENGTH_LONG).show()
 
         }
+
+    }
+
+    override fun onStart() {
+        FirebaseAuth.getInstance().addAuthStateListener(myAuthStateListener)
+        super.onStart()
+    }
+
+    override fun onDestroy() {
+        FirebaseAuth.getInstance().removeAuthStateListener(myAuthStateListener)
+        super.onDestroy()
+    }
+
+
+    fun initMyAuthListener(){
+
+
+        myAuthStateListener = object : FirebaseAuth.AuthStateListener{
+            override fun onAuthStateChanged(p0: FirebaseAuth) {
+                println("init")
+                var kullanici = p0.currentUser
+
+                if(kullanici != null){
+                    println("mail: "+kullanici.isEmailVerified)
+                    if(kullanici.isEmailVerified){
+
+                        Toast.makeText(this@LoginActivity,"mail onaylandi giris yapılıyor   ",Toast.LENGTH_SHORT).show()
+                        var intent = Intent(this@LoginActivity,MainActivity::class.java)
+                        startActivity(intent)
+                        finish()
+
+                    }else{
+                        Toast.makeText(this@LoginActivity,"mailinizi onaylayin",Toast.LENGTH_SHORT).show()
+
+                    }
+
+                }else{
+                    println("giriş yada çıkış yapıldı<Kullanıcı yok>")
+                }
+
+
+            }
+
+        }
+
+
 
     }
 
@@ -70,14 +136,12 @@ class LoginActivity : AppCompatActivity() {
                 override fun onComplete(p0: Task<AuthResult>) {
 
                     progressBarGizle()
-                    if(p0.isSuccessful){
-
-                        Toast.makeText(this@LoginActivity,"giris basarili: ${FirebaseAuth.getInstance().currentUser?.email}",Toast.LENGTH_SHORT).show()
-
+                    if(p0.isSuccessful && FirebaseAuth.getInstance().currentUser?.isEmailVerified == true){
+                        var intent = Intent(this@LoginActivity,MainActivity::class.java)
+                        startActivity(intent)
+                        finish()
                     }else{
-
                         Toast.makeText(this@LoginActivity,"islem basarisiz: ${p0.exception?.message}",Toast.LENGTH_LONG).show()
-
                     }
                 }
             })

@@ -53,16 +53,16 @@ class RegisterActivity : AppCompatActivity() {
             .addOnCompleteListener(object : OnCompleteListener<AuthResult>{
                 override fun onComplete(p0: Task<AuthResult>) {
 
+
                     if(p0.isSuccessful){
 
                         Toast.makeText(this@RegisterActivity,"kaydedildi maili: ${FirebaseAuth.getInstance().currentUser?.email}",Toast.LENGTH_LONG).show()
-
+                        println("kapı0")
                         onaylamaMailiGonder()
-                        FirebaseAuth.getInstance().signOut()
-
+                        progressBarGizle()
 
                     }else{
-
+                        progressBarGizle()
                         Toast.makeText(this@RegisterActivity,"Kayit olunamadi seveb: ${p0.exception?.message}",Toast.LENGTH_LONG).show()
 
                     }
@@ -82,20 +82,23 @@ class RegisterActivity : AppCompatActivity() {
 
         if(kullanici != null){
 
-
+            println("kapı3")
             kullanici.sendEmailVerification()
                 .addOnCompleteListener(object : OnCompleteListener<Void>{
-
                     override fun onComplete(p0: Task<Void>) {
+                        println("kapı4")
 
                         progressBarGizle()
                         if(p0.isSuccessful){
-
+                            println("kapı5")
                             Toast.makeText(this@RegisterActivity,"onaylama maili gonderildi",Toast.LENGTH_SHORT).show()
 
                         }else{
                             Toast.makeText(this@RegisterActivity,"mail gonderme islemi basarisiz: ${p0.exception?.message}",Toast.LENGTH_LONG).show()
+
                         }
+
+                        FirebaseAuth.getInstance().signOut()
 
                     }
 

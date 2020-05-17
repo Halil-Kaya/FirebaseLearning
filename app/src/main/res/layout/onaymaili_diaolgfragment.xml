@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/etMail"
+        android:layout_width="306dp"
+        android:layout_height="55dp"
+        android:ems="10"
+        android:hint="e-mail"
+        android:inputType="textEmailAddress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/etSifre"
+        android:layout_width="304dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="sifre"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="@+id/etMail"
+        app:layout_constraintStart_toStartOf="@+id/etMail"
+        app:layout_constraintTop_toBottomOf="@+id/etMail" />
+
+    <Button
+        android:id="@+id/btnGonder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="gonder"
+        app:layout_constraintEnd_toEndOf="@+id/etSifre"
+        app:layout_constraintTop_toTopOf="@+id/btnIptal" />
+
+    <Button
+        android:id="@+id/btnIptal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="iptal"
+        app:layout_constraintStart_toStartOf="@+id/etSifre"
+        app:layout_constraintTop_toBottomOf="@+id/etSifre" />
+</androidx.constraintlayout.widget.ConstraintLayout>
