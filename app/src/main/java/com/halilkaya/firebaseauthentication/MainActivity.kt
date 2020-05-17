@@ -19,17 +19,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         initAuthListener()
 
-        btnCikisYap.setOnClickListener {
 
-            FirebaseAuth.getInstance().signOut()
-
-            var intent = Intent(this,LoginActivity::class.java)
-            startActivity(intent)
-            finish()
-
-
-
-        }
 
     }
 
@@ -46,8 +36,18 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         kullaniciKontorlEt()
+        setBilgiler()
         super.onResume()
     }
+
+
+    fun setBilgiler(){
+        tvKullaniciAdi.setText(FirebaseAuth.getInstance().currentUser?.displayName)
+        tvMail.setText(FirebaseAuth.getInstance().currentUser?.email)
+        tvUserID.setText(FirebaseAuth.getInstance().currentUser?.uid)
+
+    }
+
 
 
     fun initAuthListener(){
@@ -61,6 +61,8 @@ class MainActivity : AppCompatActivity() {
                     var intent = Intent(this@MainActivity,LoginActivity::class.java)
                     startActivity(intent)
                     finish()
+                }else{
+
                 }
 
 
@@ -85,6 +87,13 @@ class MainActivity : AppCompatActivity() {
                 cikisYap()
                 println("asd")
                 return true
+            }
+            R.id.hesapAyarlari -> {
+
+                var intent = Intent(this,HesapAyarlariActivity::class.java)
+                startActivity(intent)
+
+
             }
 
 
