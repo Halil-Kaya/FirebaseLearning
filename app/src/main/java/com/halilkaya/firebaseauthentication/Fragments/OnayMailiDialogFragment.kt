@@ -1,5 +1,6 @@
 package com.halilkaya.firebaseauthentication.Fragments
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,21 +10,24 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.halilkaya.firebaseauthentication.R
 
-class OnayMailiDialogFragment(var mContex:Context) : DialogFragment() {
+class OnayMailiDialogFragment() : DialogFragment() {
 
     lateinit var etMail:EditText
     lateinit var etSifre:EditText
+    var mContex:FragmentActivity? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         var view = inflater.inflate(R.layout.onaymaili_diaolgfragment,container,false)
 
+        mContex = activity
         this.isCancelable = false
 
         etMail = view.findViewById(R.id.etMail)

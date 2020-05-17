@@ -43,7 +43,7 @@ class LoginActivity : AppCompatActivity() {
 
             override fun onClick(v: View?) {
 
-                var onayMailiDialogFragment = OnayMailiDialogFragment(this@LoginActivity)
+                var onayMailiDialogFragment = OnayMailiDialogFragment()
                 onayMailiDialogFragment.show(supportFragmentManager,"onayFragment")
 
 
