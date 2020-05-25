@@ -7,7 +7,7 @@
     tools:context=".RegisterActivity">
 
     <EditText
-        android:id="@+id/etMail"
+        android:id="@+id/etTelNo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -26,9 +26,9 @@
         android:ems="10"
         android:hint="sifre"
         android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="@+id/etMail"
-        app:layout_constraintStart_toStartOf="@+id/etMail"
-        app:layout_constraintTop_toBottomOf="@+id/etMail" />
+        app:layout_constraintEnd_toEndOf="@+id/etTelNo"
+        app:layout_constraintStart_toStartOf="@+id/etTelNo"
+        app:layout_constraintTop_toBottomOf="@+id/etTelNo" />
 
     <EditText
         android:id="@+id/etSifreTekrar"

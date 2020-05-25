@@ -26,7 +26,7 @@ class SifreSifirlamaDialogFragment : DialogFragment() {
 
         mContex = activity
 
-        etMail = view.findViewById(R.id.etMail)
+        etMail = view.findViewById(R.id.etTelNo)
 
         var btnGonder = view.findViewById<Button>(R.id.btnGonder)
         btnGonder.setOnClickListener {

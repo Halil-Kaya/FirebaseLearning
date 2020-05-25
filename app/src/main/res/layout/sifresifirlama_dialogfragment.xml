@@ -7,7 +7,7 @@
     android:layout_height="wrap_content">
 
     <EditText
-        android:id="@+id/etMail"
+        android:id="@+id/etTelNo"
         android:layout_width="286dp"
         android:layout_height="45dp"
         android:layout_marginStart="16dp"
@@ -28,14 +28,14 @@
         android:layout_marginBottom="16dp"
         android:text="gonder"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/etMail"
-        app:layout_constraintTop_toBottomOf="@+id/etMail" />
+        app:layout_constraintEnd_toEndOf="@+id/etTelNo"
+        app:layout_constraintTop_toBottomOf="@+id/etTelNo" />
 
     <Button
         android:id="@+id/btnIptal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="iptal"
-        app:layout_constraintStart_toStartOf="@+id/etMail"
+        app:layout_constraintStart_toStartOf="@+id/etTelNo"
         app:layout_constraintTop_toTopOf="@+id/btnGonder" />
 </androidx.constraintlayout.widget.ConstraintLayout>

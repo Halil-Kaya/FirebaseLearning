@@ -5,16 +5,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import androidx.fragment.app.FragmentManager
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.ktx.Firebase
 import com.halilkaya.firebaseauthentication.Fragments.OnayMailiDialogFragment
 import com.halilkaya.firebaseauthentication.Fragments.SifreSifirlamaDialogFragment
 import kotlinx.android.synthetic.main.activity_login.*
-import java.time.Instant
 
 class LoginActivity : AppCompatActivity() {
 
@@ -119,14 +116,14 @@ class LoginActivity : AppCompatActivity() {
 
     fun btnGirisYap(view:View){
 
-        if(etMail.text.isNullOrEmpty() || etSifre.text.isNullOrEmpty()){
+        if(etTelNo.text.isNullOrEmpty() || etSifre.text.isNullOrEmpty()){
 
             Toast.makeText(this,"Bilgileri giriniz",Toast.LENGTH_SHORT).show()
 
         }else{
 
 
-            girisYap(etMail.text.toString(),etSifre.text.toString())
+            girisYap(etTelNo.text.toString(),etSifre.text.toString())
 
 
 

@@ -1,6 +1,6 @@
 package com.halilkaya.firebaseauthentication
 
-import android.media.MediaPlayer
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -9,7 +9,8 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.database.FirebaseDatabase
+import com.halilkaya.firebaseauthentication.Model.Kullanici
 import kotlinx.android.synthetic.main.activity_register.*
 
 class RegisterActivity : AppCompatActivity() {
@@ -26,13 +27,13 @@ class RegisterActivity : AppCompatActivity() {
 
     fun kayitOl(view:View){
 
-        if(etMail.text.isNullOrEmpty() || etSifre.text.isNullOrEmpty() || etSifreTekrar.text.isNullOrEmpty()){
+        if(etTelNo.text.isNullOrEmpty() || etSifre.text.isNullOrEmpty() || etSifreTekrar.text.isNullOrEmpty()){
             Toast.makeText(this,"bilgileri giriniz",Toast.LENGTH_SHORT).show()
         }else{
 
             if(etSifre.text.toString().equals(etSifreTekrar.text.toString())){
 
-                yeniUyeKayit(etMail.text.toString(),etSifre.text.toString())
+                yeniUyeKayit(etTelNo.text.toString(),etSifre.text.toString())
 
             }else{
 
@@ -56,8 +57,38 @@ class RegisterActivity : AppCompatActivity() {
 
                     if(p0.isSuccessful){
 
-                        Toast.makeText(this@RegisterActivity,"kaydedildi maili: ${FirebaseAuth.getInstance().currentUser?.email}",Toast.LENGTH_LONG).show()
-                        println("kapı0")
+                      var veriTabaninaEklenecekKullanici = Kullanici()
+
+                        veriTabaninaEklenecekKullanici.isim = etTelNo.text.toString().substring(0,etTelNo.text.indexOf('@'))
+                        veriTabaninaEklenecekKullanici.kullanici_id = p0.result?.user?.uid
+                        veriTabaninaEklenecekKullanici.profil_resmi = ""
+                        veriTabaninaEklenecekKullanici.telefon = "123"
+                        veriTabaninaEklenecekKullanici.seviye = "1"
+
+                        FirebaseDatabase.getInstance().reference
+                            .child("kullanici")
+                            .child(FirebaseAuth.getInstance().currentUser?.uid+"")
+                            .setValue(veriTabaninaEklenecekKullanici)
+                            .addOnCompleteListener(object : OnCompleteListener<Void>{
+
+                                override fun onComplete(p0: Task<Void>) {
+                                    if(p0.isSuccessful){
+
+
+                                        FirebaseAuth.getInstance().signOut()
+                                        var intent = Intent(this@RegisterActivity,LoginActivity::class.java)
+                                        startActivity(intent)
+                                        finish()
+
+
+                                    }else{
+                                        Toast.makeText(this@RegisterActivity,"hata: ${p0.exception?.message}",Toast.LENGTH_LONG).show()
+                                    }
+                                }
+
+                            })
+
+
                         onaylamaMailiGonder()
                         progressBarGizle()
 

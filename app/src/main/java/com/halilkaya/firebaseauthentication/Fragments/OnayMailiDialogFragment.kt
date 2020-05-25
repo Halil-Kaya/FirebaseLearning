@@ -1,7 +1,5 @@
 package com.halilkaya.firebaseauthentication.Fragments
 
-import android.app.Activity
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -30,7 +28,7 @@ class OnayMailiDialogFragment() : DialogFragment() {
         mContex = activity
         this.isCancelable = false
 
-        etMail = view.findViewById(R.id.etMail)
+        etMail = view.findViewById(R.id.etTelNo)
         etSifre = view.findViewById(R.id.etSifre)
 
 

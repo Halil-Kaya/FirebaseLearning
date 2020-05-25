@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/etMail"
+        android:id="@+id/etTelNo"
         android:layout_width="306dp"
         android:layout_height="55dp"
         android:ems="10"
@@ -25,9 +25,9 @@
         android:ems="10"
         android:hint="sifre"
         android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="@+id/etMail"
-        app:layout_constraintStart_toStartOf="@+id/etMail"
-        app:layout_constraintTop_toBottomOf="@+id/etMail" />
+        app:layout_constraintEnd_toEndOf="@+id/etTelNo"
+        app:layout_constraintStart_toStartOf="@+id/etTelNo"
+        app:layout_constraintTop_toBottomOf="@+id/etTelNo" />
 
     <Button
         android:id="@+id/btnGonder"
