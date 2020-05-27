@@ -3,12 +3,15 @@ package com.halilkaya.firebaseauthentication
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
@@ -16,11 +19,14 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.UploadTask
 import com.halilkaya.firebaseauthentication.Fragments.ProfilResmiFragment
 import com.halilkaya.firebaseauthentication.Fragments.onProfilResmiListener
 import com.halilkaya.firebaseauthentication.Model.Kullanici
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_hesap_ayarlari.*
+import java.io.ByteArrayOutputStream
 
 class HesapAyarlariActivity : AppCompatActivity(),onProfilResmiListener {
 
@@ -45,6 +51,101 @@ class HesapAyarlariActivity : AppCompatActivity(),onProfilResmiListener {
         imgProfilResmi.setImageBitmap(kameradanGelenBitmap)
 
     }
+
+    inner class BackgroundResimCompress : AsyncTask<Uri,Void,ByteArray>{
+
+        var myBitmap:Bitmap? = null
+
+
+        constructor(){}
+        constructor(bm:Bitmap){
+
+            if(bm != null) {
+                myBitmap = bm
+            }
+
+        }
+
+
+        override fun onPreExecute() {
+            super.onPreExecute()
+        }
+
+        override fun doInBackground(vararg params: Uri?): ByteArray {
+
+            if(myBitmap == null){
+                myBitmap = MediaStore.Images.Media.getBitmap(this@HesapAyarlariActivity.contentResolver,params[0])
+            }
+
+            var resimBytes:ByteArray? = null
+
+            for(i in 1..5){
+                resimBytes = convertBitmaptoByte(myBitmap,100/i)
+            }
+
+            return resimBytes!!
+
+        }
+
+        fun convertBitmaptoByte(myBitmap:Bitmap?,i:Int):ByteArray?{
+
+            var stream = ByteArrayOutputStream()
+            myBitmap?.compress(Bitmap.CompressFormat.JPEG,i,stream)
+            return stream.toByteArray()
+
+        }
+
+        override fun onProgressUpdate(vararg values: Void?) {
+            super.onProgressUpdate(*values)
+        }
+
+        override fun onPostExecute(result: ByteArray?) {
+            super.onPostExecute(result)
+
+            uploadResimToFirebase(result)
+
+        }
+
+
+    }
+
+    fun uploadResimToFirebase(result : ByteArray?){
+
+        var storageReferans = FirebaseStorage.getInstance().reference
+        var resimEklenecekYer = storageReferans.child("images/users"+kullanici?.uid+"/profile_resim")
+
+        var uploadGorevi = resimEklenecekYer.putBytes(result!!)
+
+        uploadGorevi.addOnSuccessListener(object : OnSuccessListener<UploadTask.TaskSnapshot>{
+
+            override fun onSuccess(p0: UploadTask.TaskSnapshot?) {
+                var firebaseUrl = p0?.uploadSessionUri
+                Toast.makeText(this@HesapAyarlariActivity,firebaseUrl.toString(),Toast.LENGTH_LONG).show()
+            }
+
+        })
+
+
+    }
+
+    fun fotografCompressed(galeridenGelenUri:Uri){
+        var compressed = BackgroundResimCompress()
+        compressed.execute(galeridenGelenUri)
+
+
+    }
+
+    fun fotografCompressed(kameradanGelenBitmap: Bitmap){
+
+        var compresed = BackgroundResimCompress()
+        var uri:Uri? = null
+        compresed.execute(uri)
+
+
+    }
+
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -135,6 +236,19 @@ class HesapAyarlariActivity : AppCompatActivity(),onProfilResmiListener {
                     })
 
             }
+
+            if(galeridenGelenUri != null){
+
+                fotografCompressed(galeridenGelenUri!!)
+
+            }else if(kameradanGelenBitmap != null){
+
+                fotografCompressed(kameradanGelenBitmap!!)
+
+            }
+
+
+
 
         }
 
