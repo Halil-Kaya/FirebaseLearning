@@ -114,17 +114,40 @@ class HesapAyarlariActivity : AppCompatActivity(),onProfilResmiListener {
         var storageReferans = FirebaseStorage.getInstance().reference
         var resimEklenecekYer = storageReferans.child("images/users"+kullanici?.uid+"/profile_resim")
 
+
         var uploadGorevi = resimEklenecekYer.putBytes(result!!)
 
         uploadGorevi.addOnSuccessListener(object : OnSuccessListener<UploadTask.TaskSnapshot>{
 
             override fun onSuccess(p0: UploadTask.TaskSnapshot?) {
-                var firebaseUrl = p0?.uploadSessionUri
-                Toast.makeText(this@HesapAyarlariActivity,firebaseUrl.toString(),Toast.LENGTH_LONG).show()
+
+                resimEklenecekYer.downloadUrl.addOnSuccessListener(object : OnSuccessListener<Uri>{
+                    override fun onSuccess(p0: Uri?) {
+
+
+                        var firebaseUrl = p0.toString()
+
+
+                        Toast.makeText(this@HesapAyarlariActivity,""+firebaseUrl,Toast.LENGTH_LONG).show()
+
+                        FirebaseDatabase.getInstance().reference
+                            .child("kullanici")
+                            .child(kullanici?.uid!!)
+                            .child("profil_resmi")
+                            .setValue(firebaseUrl.toString())
+
+
+
+
+                    }
+
+                })
+
+
             }
 
-        })
 
+        })
 
     }
 
