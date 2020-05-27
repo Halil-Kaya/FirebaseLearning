@@ -360,7 +360,7 @@ class HesapAyarlariActivity : AppCompatActivity(),onProfilResmiListener {
                     var okunanKullanici = snapshot.getValue(Kullanici::class.java)
                     etName.setText(okunanKullanici?.isim)
                     etTelNo.setText(okunanKullanici?.telefon)
-
+                    Picasso.get().load(okunanKullanici?.profil_resmi).resize(100,100).into(imgProfilResmi)
 
                 }
 
