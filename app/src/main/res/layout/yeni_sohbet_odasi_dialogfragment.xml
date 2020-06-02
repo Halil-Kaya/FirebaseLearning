@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <EditText
+        android:id="@+id/etSohbetOdasiAdi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:ems="10"
+        android:hint="Sohbet Odasi Adi Giriniz"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <SeekBar
+        android:id="@+id/sbSeviye"
+        android:layout_width="205dp"
+        android:layout_height="29dp"
+        android:layout_marginTop="16dp"
+        android:max="10"
+        app:layout_constraintEnd_toEndOf="@+id/etSohbetOdasiAdi"
+        app:layout_constraintStart_toStartOf="@+id/etSohbetOdasiAdi"
+        app:layout_constraintTop_toBottomOf="@+id/etSohbetOdasiAdi" />
+
+    <TextView
+        android:id="@+id/tvSeviye"
+        android:layout_width="72dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="16dp"
+        android:text="Seviye"
+        android:gravity="center"
+        android:textStyle="bold|italic"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@+id/sbSeviye"
+        app:layout_constraintHorizontal_bias="0.503"
+        app:layout_constraintStart_toStartOf="@+id/sbSeviye"
+        app:layout_constraintTop_toBottomOf="@+id/sbSeviye" />
+
+    <Button
+        android:id="@+id/btnOlustur"
+        android:layout_width="103dp"
+        android:layout_height="53dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="Olustur"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/sbSeviye"
+        app:layout_constraintTop_toBottomOf="@+id/tvSeviye" />
+</androidx.constraintlayout.widget.ConstraintLayout>

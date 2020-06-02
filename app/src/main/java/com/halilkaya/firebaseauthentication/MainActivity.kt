@@ -96,6 +96,11 @@ class MainActivity : AppCompatActivity() {
 
             }
 
+            R.id.sohbetOdasi -> {
+                var intent = Intent(this,SohbetOdasiActivity::class.java)
+                startActivity(intent)
+            }
+
 
         }
 

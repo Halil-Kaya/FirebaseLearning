@@ -4,4 +4,6 @@
         android:title="Hesap Ayarları"></item>
     <item android:id="@+id/cikisYap"
         android:title="Çıkış Yap"></item>
+    <item android:id="@+id/sohbetOdasi"
+        android:title="Sohbet Odası"></item>
 </menu>
