@@ -14,9 +14,13 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.halilkaya.firebaseauthentication.Model.Kullanici
+import com.halilkaya.firebaseauthentication.Model.SohbetMesaj
 import com.halilkaya.firebaseauthentication.Model.SohbetOdasi
 import com.halilkaya.firebaseauthentication.R
+import com.halilkaya.firebaseauthentication.SohbetOdasiActivity
 import kotlinx.android.synthetic.main.activity_sohbet_odasi.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class YeniSohbetOdasiDialogFragment : DialogFragment() {
 
@@ -76,8 +80,23 @@ class YeniSohbetOdasiDialogFragment : DialogFragment() {
 
                     ref.child("sohbet_odasi").child(sohbetOdasiID).setValue(yeniSohbetOdasi)
 
-                    dismiss()
+                    var mesajID = ref.child("sohbet_odasi").push().key
 
+                    var karsilamaMesaji = SohbetMesaj()
+                    karsilamaMesaji.mesaj = "bu ilk mesaj hos geldin bravo six going dark"
+                    karsilamaMesaji.time = getTarih()
+
+                    ref.child("sohbet_odasi")
+                        .child(sohbetOdasiID)
+                        .child("sohbet_odasi_mesajlari")
+                        .child(mesajID.toString())
+                        .setValue(karsilamaMesaji)
+
+                    var snackbar = Snackbar.make(rootLayout,"Sohbet Odasi Olusturuldu",Snackbar.LENGTH_SHORT)
+                    snackbar.show()
+
+                    (activity as SohbetOdasiActivity).init()
+                    dismiss()
 
 
                 }else{
@@ -98,6 +117,11 @@ class YeniSohbetOdasiDialogFragment : DialogFragment() {
         return view
     }
 
+
+    fun getTarih():String{
+        var sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale("tr"))
+        return sdf.format(Date())
+    }
 
 
     fun kullaniciSeviyesiBilgi(){
