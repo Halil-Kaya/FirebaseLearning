@@ -3,6 +3,7 @@ package com.halilkaya.firebaseauthentication
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -10,6 +11,7 @@ import com.google.firebase.database.ValueEventListener
 import com.halilkaya.firebaseauthentication.Fragments.YeniSohbetOdasiDialogFragment
 import com.halilkaya.firebaseauthentication.Model.SohbetMesaj
 import com.halilkaya.firebaseauthentication.Model.SohbetOdasi
+import com.halilkaya.firebaseauthentication.adapter.SohbetOdasiRecyclerViewAdapter
 import kotlinx.android.synthetic.main.activity_sohbet_odasi.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -99,9 +101,9 @@ class SohbetOdasiActivity : AppCompatActivity() {
 
                 }
 
-                println("sohbet odasi size: ${tumSohbetOdalari.size}")
-                Toast.makeText(this@SohbetOdasiActivity,"sohbet odasi size: ${tumSohbetOdalari.size}",Toast.LENGTH_SHORT).show()
-
+                var adapter = SohbetOdasiRecyclerViewAdapter(tumSohbetOdalari)
+                myRecyvlerView.adapter = adapter
+                myRecyvlerView.layoutManager = LinearLayoutManager(this@SohbetOdasiActivity,LinearLayoutManager.VERTICAL,false)
 
             }
 
