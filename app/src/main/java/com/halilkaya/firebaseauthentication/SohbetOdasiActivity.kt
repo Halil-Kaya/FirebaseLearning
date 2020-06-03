@@ -24,12 +24,7 @@ class SohbetOdasiActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sohbet_odasi)
-        println("calismasi lazim")
-        println("calismasi lazim")
-        println("calismasi lazim")
-        println("calismasi lazim")
-        println("calismasi lazim")
-        println("calismasi lazim")
+        
 
         init()
 
@@ -53,7 +48,6 @@ class SohbetOdasiActivity : AppCompatActivity() {
     }
 
     fun tumSohbetOdalariniGetir(){
-        println("buraya girdi")
         tumSohbetOdalari = ArrayList()
 
         var ref = FirebaseDatabase.getInstance().reference
@@ -65,8 +59,7 @@ class SohbetOdasiActivity : AppCompatActivity() {
             }
 
             override fun onDataChange(p0: DataSnapshot) {
-                println("?")
-                Toast.makeText(this@SohbetOdasiActivity,"??",Toast.LENGTH_SHORT).show()
+
 
                 for (tekSohbetOdasi in p0.children){
 
@@ -101,18 +94,28 @@ class SohbetOdasiActivity : AppCompatActivity() {
 
                 }
 
-                var adapter = SohbetOdasiRecyclerViewAdapter(tumSohbetOdalari)
+                var adapter = SohbetOdasiRecyclerViewAdapter(this@SohbetOdasiActivity,tumSohbetOdalari)
                 myRecyvlerView.adapter = adapter
                 myRecyvlerView.layoutManager = LinearLayoutManager(this@SohbetOdasiActivity,LinearLayoutManager.VERTICAL,false)
 
             }
 
-
         })
 
+    }
 
+    fun sohbetOdasiSil(silenecekOdaID:String){
+
+        var ref = FirebaseDatabase.getInstance().reference
+
+        ref.child("sohbet_odasi")
+            .child(silenecekOdaID)
+            .removeValue()
+
+        tumSohbetOdalariniGetir()
 
 
     }
+
 
 }

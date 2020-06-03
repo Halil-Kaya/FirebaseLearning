@@ -1,22 +1,28 @@
 package com.halilkaya.firebaseauthentication.adapter
 
+import android.app.AlertDialog
+import android.content.Context
+import android.content.DialogInterface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.ktx.Firebase
 import com.halilkaya.firebaseauthentication.Model.Kullanici
 import com.halilkaya.firebaseauthentication.Model.SohbetOdasi
 import com.halilkaya.firebaseauthentication.R
+import com.halilkaya.firebaseauthentication.SohbetOdasiActivity
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.tek_satir_sohbet_odasi.view.*
 import java.util.zip.Inflater
 
-class SohbetOdasiRecyclerViewAdapter(var tumSohbetOdalari:ArrayList<SohbetOdasi>) : RecyclerView.Adapter<SohbetOdasiRecyclerViewAdapter.MyViewHolder>() {
+class SohbetOdasiRecyclerViewAdapter(var myActivity:Context,var tumSohbetOdalari:ArrayList<SohbetOdasi>) : RecyclerView.Adapter<SohbetOdasiRecyclerViewAdapter.MyViewHolder>() {
 
 
 
@@ -60,7 +66,36 @@ class SohbetOdasiRecyclerViewAdapter(var tumSohbetOdalari:ArrayList<SohbetOdasi>
 
             btnSohbetiSil.setOnClickListener {
 
+                if(oAnOlusturulanSohbetOdasi.olusturan_id.equals(FirebaseAuth.getInstance().currentUser?.uid)){
 
+                    var myAlertDialog = AlertDialog.Builder(tekSatir.context)
+                    myAlertDialog.setTitle("Sohbet Odasi Sil?")
+
+                    myAlertDialog.setPositiveButton("Evet Sil",object : DialogInterface.OnClickListener{
+
+                        override fun onClick(dialog: DialogInterface?, which: Int) {
+
+                            (myActivity as SohbetOdasiActivity).sohbetOdasiSil(oAnOlusturulanSohbetOdasi.sohbet_odasi_id)
+
+                        }
+
+                    })
+
+                    myAlertDialog.setNegativeButton("Hayir Silme", object : DialogInterface.OnClickListener{
+
+                        override fun onClick(dialog: DialogInterface?, which: Int) {
+
+
+
+                        }
+
+                    })
+
+                    myAlertDialog.show()
+
+
+
+                }
 
             }
 
