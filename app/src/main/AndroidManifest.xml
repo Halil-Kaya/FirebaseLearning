@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SohbetOdasiActivity"></activity>
+        <activity android:name=".MesajlasmaActiviyu"></activity>
+        <activity android:name=".SohbetOdasiActivity" />
         <activity android:name=".HesapAyarlariActivity" />
         <activity android:name=".LoginActivity">
             <intent-filter>

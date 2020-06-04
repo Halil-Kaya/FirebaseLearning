@@ -83,6 +83,8 @@ class YeniSohbetOdasiDialogFragment : DialogFragment() {
                     var mesajID = ref.child("sohbet_odasi").push().key
 
                     var karsilamaMesaji = SohbetMesaj()
+
+                    
                     karsilamaMesaji.mesaj = "bu ilk mesaj hos geldin bravo six going dark"
                     karsilamaMesaji.time = getTarih()
 

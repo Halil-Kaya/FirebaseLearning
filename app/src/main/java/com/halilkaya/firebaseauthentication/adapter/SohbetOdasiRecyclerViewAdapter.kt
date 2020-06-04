@@ -3,6 +3,7 @@ package com.halilkaya.firebaseauthentication.adapter
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
+import com.halilkaya.firebaseauthentication.MesajlasmaActiviyu
 import com.halilkaya.firebaseauthentication.Model.Kullanici
 import com.halilkaya.firebaseauthentication.Model.SohbetOdasi
 import com.halilkaya.firebaseauthentication.R
@@ -63,6 +65,14 @@ class SohbetOdasiRecyclerViewAdapter(var myActivity:Context,var tumSohbetOdalari
             tvOdaIsmi.setText(oAnOlusturulanSohbetOdasi.sohbet_odasi_adi)
             tvMesajSayisi.setText(oAnOlusturulanSohbetOdasi.sohbet_odasi_mesajlari?.size.toString())
 
+            tekSatir.setOnClickListener {
+
+                var intent = Intent(tekSatir.context,MesajlasmaActiviyu::class.java)
+                intent.putExtra("sohbetID",oAnOlusturulanSohbetOdasi.sohbet_odasi_id)
+                (myActivity as SohbetOdasiActivity).startActivity(intent)
+
+
+            }
 
             btnSohbetiSil.setOnClickListener {
 
