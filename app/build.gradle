@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId "com.halilkaya.firebaseauthentication"
-        minSdkVersion 25
+        minSdkVersion 18
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"

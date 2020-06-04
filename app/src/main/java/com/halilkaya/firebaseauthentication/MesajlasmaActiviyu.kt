@@ -12,6 +12,11 @@ import com.halilkaya.firebaseauthentication.Model.Kullanici
 import com.halilkaya.firebaseauthentication.Model.SohbetMesaj
 import com.halilkaya.firebaseauthentication.adapter.SohbetMesajRecyvlerViewAdapter
 import kotlinx.android.synthetic.main.activity_mesajlasma_activiyu.*
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
+import kotlin.collections.HashSet
 
 class MesajlasmaActiviyu : AppCompatActivity() {
 
@@ -21,6 +26,7 @@ class MesajlasmaActiviyu : AppCompatActivity() {
 
     var myAuthStateListener:FirebaseAuth.AuthStateListener? = null
     var sohbetOdasiId:String? = ""
+    var myHashSet:HashSet<String>? = null
 
     var myAdapter:SohbetMesajRecyvlerViewAdapter? = null
 
@@ -28,11 +34,54 @@ class MesajlasmaActiviyu : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mesajlasma_activiyu)
         baslatFirebaseAuthStateListener()
-
+        init()
         sohbetOdasiOgren()
 
     }
 
+
+
+    fun init(){
+
+        btnMesajGonder.setOnClickListener {
+
+            if(etMesaj.text.isNotEmpty()){
+
+                var sohbetMesaj = SohbetMesaj()
+                sohbetMesaj.kullanici_id = FirebaseAuth.getInstance().currentUser?.uid
+                sohbetMesaj.time = getTarih()
+                sohbetMesaj.mesaj = etMesaj.text.toString()
+
+
+                var ref = FirebaseDatabase.getInstance().reference.child("sohbet_odasi")
+                        .child(sohbetOdasiId.toString())
+                        .child("sohbet_odasi_mesajlari")
+
+                var yeniMesajID = ref.push().key
+
+                ref.child(yeniMesajID+"")
+                    .setValue(sohbetMesaj)
+
+                etMesaj.setText("")
+
+                rvMesajlar.scrollToPosition(myAdapter!!.itemCount)
+
+            }
+
+        }
+
+        etMesaj.setOnClickListener {
+
+            rvMesajlar.smoothScrollToPosition(myAdapter!!.itemCount-1)
+
+        }
+
+    }
+
+    fun getTarih():String{
+        var sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale("tr"))
+        return sdf.format(Date())
+    }
 
     fun sohbetOdasiOgren(){
         sohbetOdasiId = intent.getStringExtra("sohbetID")
@@ -59,6 +108,7 @@ class MesajlasmaActiviyu : AppCompatActivity() {
 
         if(tumMesajlar == null){
             tumMesajlar = ArrayList()
+            myHashSet = HashSet<String>()
         }
 
         var sorgu = myReference.addValueEventListener(object : ValueEventListener{
@@ -74,6 +124,13 @@ class MesajlasmaActiviyu : AppCompatActivity() {
                     var tmpSohbetMesaj = SohbetMesaj()
 
                     var kullanici_id = sohbetMesaj.getValue(SohbetMesaj::class.java)?.kullanici_id
+
+
+                    if(!myHashSet!!.contains(sohbetMesaj.key)){
+
+                        myHashSet!!.add(sohbetMesaj.key+"")
+
+
 
                     if(kullanici_id != null){
 
@@ -116,6 +173,10 @@ class MesajlasmaActiviyu : AppCompatActivity() {
 
                     tumMesajlar!!.add(tmpSohbetMesaj)
                     myAdapter?.notifyDataSetChanged()
+
+                    }
+
+
 
                 }
 

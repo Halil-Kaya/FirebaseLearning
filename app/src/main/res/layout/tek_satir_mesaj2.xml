@@ -19,9 +19,9 @@
             android:id="@+id/imgProfilResmi"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/common_google_signin_btn_icon_dark" />
 
@@ -32,7 +32,8 @@
             android:layout_marginStart="16dp"
             android:text="Mesaj"
             app:layout_constraintBottom_toBottomOf="@+id/imgProfilResmi"
-            app:layout_constraintStart_toEndOf="@+id/imgProfilResmi"
+            app:layout_constraintEnd_toStartOf="@+id/imgProfilResmi"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/imgProfilResmi" />
 
         <TextView
