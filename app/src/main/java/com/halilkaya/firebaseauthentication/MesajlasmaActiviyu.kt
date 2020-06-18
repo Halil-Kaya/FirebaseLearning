@@ -27,6 +27,11 @@ import kotlin.collections.HashSet
 
 class MesajlasmaActiviyu : AppCompatActivity() {
 
+    companion object{
+        var activityAcikMi = false
+    }
+
+
     var tumMesajlar:ArrayList<SohbetMesaj>? = null
 
     lateinit var myReference:DatabaseReference
@@ -202,6 +207,17 @@ class MesajlasmaActiviyu : AppCompatActivity() {
 
     }
 
+    fun gorunenMesajSayisiniGuncelle(mesajSayisi:Int){
+
+        var ref = FirebaseDatabase.getInstance().reference
+            .child("sohbet_odasi")
+            .child(sohbetOdasiId.toString())
+            .child("sohbet_odasindaki_kullanicilar")
+            .child(FirebaseAuth.getInstance().currentUser!!.uid)
+            .child("okunmamis_mesaj_sayisi")
+            .setValue("${mesajSayisi}")
+    }
+
     var myValueEventListener = object : ValueEventListener{
 
         override fun onCancelled(p0: DatabaseError) {
@@ -212,7 +228,9 @@ class MesajlasmaActiviyu : AppCompatActivity() {
 
             Toast.makeText(this@MesajlasmaActiviyu,"degisti",Toast.LENGTH_SHORT).show()
             sohbetOdasindakiMesajlariGetir()
-
+            if(activityAcikMi) {
+                gorunenMesajSayisiniGuncelle(p0.childrenCount.toInt())
+            }
         }
 
     }
@@ -355,12 +373,14 @@ class MesajlasmaActiviyu : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        activityAcikMi = true
         FirebaseAuth.getInstance().addAuthStateListener(myAuthStateListener!!)
     }
 
 
     override fun onStop() {
         super.onStop()
+        activityAcikMi = false
         FirebaseAuth.getInstance().removeAuthStateListener(myAuthStateListener!!)
     }
 
