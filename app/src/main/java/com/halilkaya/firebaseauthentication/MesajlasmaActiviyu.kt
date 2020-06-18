@@ -8,10 +8,17 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.halilkaya.firebaseauthentication.Model.FCMModel
 import com.halilkaya.firebaseauthentication.Model.Kullanici
 import com.halilkaya.firebaseauthentication.Model.SohbetMesaj
 import com.halilkaya.firebaseauthentication.adapter.SohbetMesajRecyvlerViewAdapter
+import com.halilkaya.firebaseauthentication.services.FCMInterface
 import kotlinx.android.synthetic.main.activity_mesajlasma_activiyu.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -24,6 +31,11 @@ class MesajlasmaActiviyu : AppCompatActivity() {
 
     lateinit var myReference:DatabaseReference
 
+    val BASE_URL = "https://fcm.googleapis.com/fcm/"
+
+    lateinit var SERVER_KEY:String
+
+
     var myAuthStateListener:FirebaseAuth.AuthStateListener? = null
     var sohbetOdasiId:String? = ""
     var myHashSet:HashSet<String>? = null
@@ -34,11 +46,32 @@ class MesajlasmaActiviyu : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mesajlasma_activiyu)
         baslatFirebaseAuthStateListener()
+        initServerKeyOku()
         init()
         sohbetOdasiOgren()
 
     }
+    fun initServerKeyOku(){
 
+        var ref = FirebaseDatabase.getInstance().reference
+            .child("server")
+            .orderByValue()
+            .addListenerForSingleValueEvent(object : ValueEventListener{
+
+                override fun onCancelled(p0: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    var singleSnapshot = p0.children.iterator().next()
+                    SERVER_KEY = singleSnapshot.getValue().toString()
+                    println("server_key : ${SERVER_KEY}")
+                }
+
+            })
+
+
+    }
 
 
     fun init(){
@@ -62,9 +95,88 @@ class MesajlasmaActiviyu : AppCompatActivity() {
                 ref.child(yeniMesajID+"")
                     .setValue(sohbetMesaj)
 
-                etMesaj.setText("")
 
                 rvMesajlar.scrollToPosition(myAdapter!!.itemCount)
+
+                var retrofit = Retrofit.Builder()
+                    .baseUrl(BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+
+                var myInterface = retrofit.create(FCMInterface::class.java)
+                var headers = HashMap<String,String>()
+                headers.put("Content-Type","application/json")
+                headers.put("Authorization","key=${SERVER_KEY}")
+
+                FirebaseDatabase.getInstance().reference
+                    .child("sohbet_odasi")
+                    .child(sohbetOdasiId.toString())
+                    .child("sohbet_odasindaki_kullanicilar")
+                    .orderByKey().addListenerForSingleValueEvent(object : ValueEventListener{
+
+                        override fun onCancelled(p0: DatabaseError) {
+                            TODO("Not yet implemented")
+                        }
+
+                        override fun onDataChange(p0: DataSnapshot) {
+                            for(users in p0.children){
+
+                                var id = users.key
+
+                                if(!id!!.equals(FirebaseAuth.getInstance().currentUser?.uid.toString())){
+
+                                    FirebaseDatabase.getInstance().reference.child("kullanici")
+                                        .orderByKey()
+                                        .equalTo(id)
+                                        .addListenerForSingleValueEvent(object : ValueEventListener{
+
+                                            override fun onCancelled(p0: DatabaseError) {
+                                                TODO("Not yet implemented")
+                                            }
+
+                                            override fun onDataChange(p0: DataSnapshot) {
+
+                                                var singleSnapshot = p0.children.iterator().next()
+
+                                                var message_token = singleSnapshot.getValue(Kullanici::class.java)?.mesaj_token
+
+                                                var data = FCMModel.Data()
+                                                data.baslik = "Yeni Mesaj Var"
+                                                data.bildirimTuru = "sohbet"
+                                                data.icerik = etMesaj.text.toString()
+                                                data.sohbet_odasi_id = sohbetOdasiId
+                                                var to = message_token
+
+                                                var bildirim = FCMModel()
+                                                bildirim.to = to
+                                                bildirim.data = data
+
+                                                var request = myInterface.bildirimGonder(headers,bildirim)
+                                                request.enqueue(object : Callback<Response<FCMModel>>{
+                                                    override fun onFailure(call: Call<Response<FCMModel>>, t: Throwable) {
+                                                        println("retrofit_error")
+                                                    }
+
+                                                    override fun onResponse(call: Call<Response<FCMModel>>, response: Response<Response<FCMModel>>) {
+                                                        println("retrofit_succes")
+                                                    }
+
+                                                })
+
+                                            }
+
+                                        })
+
+
+                                }
+
+
+                            }
+                        }
+
+                    })
+
+
 
             }
 
@@ -98,6 +210,7 @@ class MesajlasmaActiviyu : AppCompatActivity() {
 
         override fun onDataChange(p0: DataSnapshot) {
 
+            Toast.makeText(this@MesajlasmaActiviyu,"degisti",Toast.LENGTH_SHORT).show()
             sohbetOdasindakiMesajlariGetir()
 
         }

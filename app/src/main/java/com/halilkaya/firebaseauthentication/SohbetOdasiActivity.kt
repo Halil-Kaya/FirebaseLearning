@@ -21,12 +21,36 @@ class SohbetOdasiActivity : AppCompatActivity() {
 
     lateinit var tumSohbetOdalari:ArrayList<SohbetOdasi>
 
+    lateinit var SERVER_KEY:String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sohbet_odasi)
 
-
+        initServerKeyOku()
         init()
+
+
+    }
+
+    fun initServerKeyOku(){
+
+        var ref = FirebaseDatabase.getInstance().reference
+            .child("server")
+            .orderByValue()
+            .addListenerForSingleValueEvent(object : ValueEventListener{
+
+                override fun onCancelled(p0: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onDataChange(p0: DataSnapshot) {
+                    var singleSnapshot = p0.children.iterator().next()
+                    SERVER_KEY = singleSnapshot.getValue().toString()
+                    println("server_key : ${SERVER_KEY}")
+                }
+
+            })
 
 
     }

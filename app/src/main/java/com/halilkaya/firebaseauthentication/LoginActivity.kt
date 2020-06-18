@@ -83,11 +83,9 @@ class LoginActivity : AppCompatActivity() {
 
         myAuthStateListener = object : FirebaseAuth.AuthStateListener{
             override fun onAuthStateChanged(p0: FirebaseAuth) {
-                println("init")
                 var kullanici = p0.currentUser
 
                 if(kullanici != null){
-                    println("mail: "+kullanici.isEmailVerified)
                     if(kullanici.isEmailVerified){
 
                         Toast.makeText(this@LoginActivity,"mail onaylandi giris yapılıyor   ",Toast.LENGTH_SHORT).show()
@@ -101,7 +99,6 @@ class LoginActivity : AppCompatActivity() {
                     }
 
                 }else{
-                    println("giriş yada çıkış yapıldı<Kullanıcı yok>")
                 }
 
 

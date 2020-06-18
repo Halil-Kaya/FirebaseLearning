@@ -67,6 +67,8 @@ class SohbetOdasiRecyclerViewAdapter(var myActivity:Context,var tumSohbetOdalari
 
             tekSatir.setOnClickListener {
 
+                kullaniciyiSohbetOdasinaKaydet(oAnOlusturulanSohbetOdasi)
+
                 var intent = Intent(tekSatir.context,MesajlasmaActiviyu::class.java)
                 intent.putExtra("sohbetID",oAnOlusturulanSohbetOdasi.sohbet_odasi_id)
                 (myActivity as SohbetOdasiActivity).startActivity(intent)
@@ -136,7 +138,17 @@ class SohbetOdasiRecyclerViewAdapter(var myActivity:Context,var tumSohbetOdalari
 
                 })
 
+        }
 
+        fun kullaniciyiSohbetOdasinaKaydet(oAnOlusturulanSohbetOdasi:SohbetOdasi){
+
+            var ref = FirebaseDatabase.getInstance().reference
+            ref.child("sohbet_odasi")
+                .child(oAnOlusturulanSohbetOdasi.sohbet_odasi_id.toString())
+                .child("sohbet_odasindaki_kullanicilar")
+                .child(FirebaseAuth.getInstance().currentUser?.uid.toString())
+                .child("okunmamis_mesaj_sayisi")
+                .setValue(oAnOlusturulanSohbetOdasi.sohbet_odasi_mesajlari?.size.toString())
 
 
         }

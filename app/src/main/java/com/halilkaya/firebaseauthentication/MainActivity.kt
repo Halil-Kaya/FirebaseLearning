@@ -3,9 +3,13 @@ package com.halilkaya.firebaseauthentication
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -18,7 +22,25 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initAuthListener()
+        initFCM()
 
+    }
+
+    fun initFCM(){
+        var ref = FirebaseDatabase.getInstance().reference
+
+         FirebaseInstanceId.getInstance().instanceId.addOnSuccessListener{idResult ->
+            Toast.makeText(this,"token kismi aktif",Toast.LENGTH_SHORT).show()
+            var token = idResult.token
+
+             Toast.makeText(this,"token: ${token}",Toast.LENGTH_SHORT).show()
+
+             ref.child("kullanici")
+                 .child(FirebaseAuth.getInstance().currentUser?.uid.toString())
+                 .child("mesaj_token")
+                 .setValue(token)
+
+        }
 
 
     }
@@ -85,7 +107,6 @@ class MainActivity : AppCompatActivity() {
 
             R.id.cikisYap -> {
                 cikisYap()
-                println("asd")
                 return true
             }
             R.id.hesapAyarlari -> {
