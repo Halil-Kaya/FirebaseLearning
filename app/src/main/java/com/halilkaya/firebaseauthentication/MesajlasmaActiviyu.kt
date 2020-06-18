@@ -149,7 +149,7 @@ class MesajlasmaActiviyu : AppCompatActivity() {
                                                 data.baslik = "Yeni Mesaj Var"
                                                 data.bildirimTuru = "sohbet"
                                                 data.icerik = etMesaj.text.toString()
-                                                data.sohbet_odasi_id = sohbetOdasiId
+                                                data.sohbet_odasi_id = sohbetOdasiId.toString()
                                                 var to = message_token
 
                                                 var bildirim = FCMModel()
@@ -163,7 +163,7 @@ class MesajlasmaActiviyu : AppCompatActivity() {
                                                     }
 
                                                     override fun onResponse(call: Call<Response<FCMModel>>, response: Response<Response<FCMModel>>) {
-                                                        println("retrofit_succes")
+                                                        println("retrofit_succes + "+ sohbetOdasiId)
                                                     }
 
                                                 })
@@ -203,9 +203,8 @@ class MesajlasmaActiviyu : AppCompatActivity() {
     fun sohbetOdasiOgren(){
         sohbetOdasiId = intent.getStringExtra("sohbetID")
         baslatMesajListener()
-
-
     }
+
 
     fun gorunenMesajSayisiniGuncelle(mesajSayisi:Int){
 

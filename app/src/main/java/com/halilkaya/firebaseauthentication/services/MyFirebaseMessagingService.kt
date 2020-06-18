@@ -2,7 +2,9 @@ package com.halilkaya.firebaseauthentication.services
 
 import android.app.Notification
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.media.RingtoneManager
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -15,6 +17,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.halilkaya.firebaseauthentication.MainActivity
 import com.halilkaya.firebaseauthentication.MesajlasmaActiviyu
 import com.halilkaya.firebaseauthentication.Model.SohbetOdasi
 import com.halilkaya.firebaseauthentication.R
@@ -48,7 +51,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         var ref = FirebaseDatabase.getInstance().reference
             .child("sohbet_odasi")
             .orderByKey()
-            .equalTo(sohbet_odasi_id).addListenerForSingleValueEvent(object : ValueEventListener{
+            .equalTo(sohbet_odasi_id.toString()).addListenerForSingleValueEvent(object : ValueEventListener{
 
                 override fun onCancelled(p0: DatabaseError) {
                     TODO("Not yet implemented")
@@ -92,6 +95,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         var bildirimID = notificationIDolustur(oAnKiSohbetOdasi.sohbet_odasi_id)
 
+        var pendingIntent = Intent(this,MainActivity::class.java)
+        pendingIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        pendingIntent.putExtra("sohbet_odasi_id",oAnKiSohbetOdasi.sohbet_odasi_id)
+
+        var bildirimPendingIntent = PendingIntent.getActivity(this,100,pendingIntent,PendingIntent.FLAG_UPDATE_CURRENT)
+
         var builder = NotificationCompat.Builder(this,oAnKiSohbetOdasi.sohbet_odasi_adi)
             .setSmallIcon(R.drawable.ic_launcher_background)
             .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
@@ -99,6 +108,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setAutoCancel(true)
             .setSubText("okunmayi bekleyen mesaj sayisi: "+okunmayiBekleyenMesajSayisi)
             .setOnlyAlertOnce(true)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(icerik))
+            .setContentIntent(bildirimPendingIntent)
 
         var notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(bildirimID,builder.build())
